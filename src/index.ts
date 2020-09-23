@@ -34,11 +34,12 @@ app
   .command('upload')
   .description('compile and upload firmware')
   .option('-p, --port <port>', 'device port')
-  .option('-l, --lock <lock>', 'lock firmware to specific chip id')
-  .option('-s, --max_slv <max_slv>', 'maximum number of slaves allowed')
-  .option('-w --webui', 'upload Web-UI after uploading the firmware image')
-  .action((port, options) => {
-    app.uploadFirmware(port, options);
+  .option('-l, --lock <chipId>', 'lock firmware to specific chip id')
+  .option('-s, --slaves <slaves>', 'maximum number of slaves allowed')
+  .option('-w --webui', 'upload web-ui after uploading the firmware image')
+  .option('-t --trial <trialTime>', 'enable trial mode')
+  .action((options) => {
+    app.uploadFirmware(options);
   });
 
 /**
