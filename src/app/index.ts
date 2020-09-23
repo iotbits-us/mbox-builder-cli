@@ -4,6 +4,7 @@ import Table from 'cli-table';
 import { Command } from 'commander';
 import Configstore from 'configstore';
 import figlet from 'figlet';
+import _ from 'lodash';
 import helper, { GitHubAuth } from 'mbox-builder-helper';
 import ora from 'ora';
 import readPkg from 'read-pkg';
@@ -24,6 +25,7 @@ class App extends Command {
     super('mbox-builder-helper');
     // read data from package.json
     this.pkg = readPkg.sync();
+
     // create config store object
     this.config = new Configstore(this.pkg.version);
     // clear console
