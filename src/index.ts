@@ -1,11 +1,5 @@
 import app from './app';
 
-// App version
-const version = '1.0.0';
-// App description
-const description =
-  'ModbusBox Firmware Builder CLI | IOTBITS (www.iotbits.net)';
-
 /**
  * List available serial ports
  */
@@ -55,4 +49,4 @@ app
   });
 
 // Start application. Always run this at the end of this file.
-app.start(version, description);
+app.start();
