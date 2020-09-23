@@ -22,9 +22,13 @@ class App extends Command {
    */
   private constructor(appName?: string) {
     super(appName);
+    // read data from package.json
     this.pkg = readPkg.sync();
+    // create config store object
     this.config = new Configstore(this.pkg.version);
+    // clear console
     clear();
+    // show top caption
     console.log(
       chalk.cyanBright(
         figlet.textSync('MBox Builder', { horizontalLayout: 'full' })
@@ -32,6 +36,10 @@ class App extends Command {
     );
   }
 
+  /**
+   * Get class's singleton instance
+   * @param appName
+   */
   public static getInstance(appName?: string): App {
     if (!App.instance) {
       App.instance = new App(appName);
@@ -40,7 +48,9 @@ class App extends Command {
     return App.instance;
   }
 
-  // start app
+  /**
+   * Start app
+   */
   start() {
     this.version(this.pkg.version);
     this.description(this.pkg.description);
@@ -50,7 +60,9 @@ class App extends Command {
     }
   }
 
-  // list available serial ports
+  /**
+   * list available serial ports
+   */
   async listSerialPorts() {
     const loading = ora('Looking for available serial ports').start();
 
@@ -88,7 +100,10 @@ class App extends Command {
     );
   }
 
-  // get chip id
+  /**
+   *  Get chip id
+   * @param port
+   */
   async getChipId(port: string) {
     const loading = ora();
 
@@ -111,7 +126,9 @@ class App extends Command {
     );
   }
 
-  // upload firmware
+  /**
+   * Upload firmware
+   */
   async uploadFirmware(options: {
     port: string;
     dir: string;
@@ -152,7 +169,10 @@ class App extends Command {
     );
   }
 
-  // erase device flash memory
+  /**
+   * Erase device flash memory
+   * @param port
+   */
   async eraseFlash(port: string) {
     const loading = ora();
 
@@ -203,4 +223,5 @@ class App extends Command {
 }
 
 const app = App.getInstance('mbox-builder');
+
 export default app;
