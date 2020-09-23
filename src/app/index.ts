@@ -11,9 +11,9 @@ import * as prompt from './prompt';
 
 class App extends Command {
   private static instance: App;
-
   private constructor(appName?: string) {
     super(appName);
+
     this.spinner = ora();
     clear();
     console.log(
@@ -106,15 +106,42 @@ class App extends Command {
   // upload firmware
   async uploadFirmware(options: {
     port: string;
-    chipId: string;
+    dir: string;
+    lock: string;
     slaves: number;
     webui: boolean;
-    trialTime: number;
+    trial: number;
   }) {
-    // if no port provided as argument, prompt with available ports.
+    const loading = ora();
+    // if no port provided, prompt with available ports.
     if (!options.port) {
       options.port = (await prompt.selectPort()).path;
     }
+
+    // if no firmware directory provided, use current working directory.
+    if (!options.dir) {
+      options.dir = process.cwd();
+    }
+
+    loading.start('Compiling and uploading firmware');
+
+    const auth = {
+      username: 'evert-arias',
+      password: '304e7d191f5c8ecd3bf2abc370fa5103e6ef8b23',
+    };
+
+    helper.buildAndUpload(options.dir, options.port, auth).then(
+      () => {
+        loading.succeed(chalk.greenBright('Firmware successfully uploaded'));
+      },
+      (error) => {
+        loading.fail(
+          `An error has ocurred trying to build and upload firmware`
+        );
+        // TODO: Only show detailed error message if verbose output enabled.
+        console.log(chalk.red(`Error: ${error}`));
+      }
+    );
   }
 
   // erase device flash memory
