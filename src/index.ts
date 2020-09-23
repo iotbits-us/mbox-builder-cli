@@ -34,10 +34,10 @@ app
   .command('upload')
   .description('compile and upload firmware')
   .option('-p, --port <port>', 'device port')
-  .option('-l, --lock <chipId>', 'lock firmware to specific chip id')
+  .option('-l, --lock <chip_id>', 'lock firmware to specific chip id')
   .option('-s, --slaves <slaves>', 'maximum number of slaves allowed')
   .option('-w --webui', 'upload web-ui after uploading the firmware image')
-  .option('-t --trial <trialTime>', 'enable trial mode')
+  .option('-t --trial <time>', 'enable trial mode')
   .action((options) => {
     app.uploadFirmware(options);
   });
