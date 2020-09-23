@@ -14,7 +14,7 @@ import * as prompt from './prompt';
 class App extends Command {
   private static instance: App;
   private config: Configstore;
-  private pkg;
+  private pkg: readPkg.NormalizedPackageJson;
 
   /**
    * Class constructor
@@ -23,9 +23,7 @@ class App extends Command {
   private constructor(appName?: string) {
     super(appName);
     this.pkg = readPkg.sync();
-    // Create a Configstore instance
-    this.config = new Configstore(this.pkg.name);
-    this.spinner = ora();
+    this.config = new Configstore(this.pkg.version);
     clear();
     console.log(
       chalk.cyanBright(
@@ -83,7 +81,7 @@ class App extends Command {
         console.log(table.toString());
       },
       (error) => {
-        app.spinner.fail(`Could not retrieve serial ports`);
+        loading.fail(`Could not retrieve serial ports`);
         // TODO: Only show detailed error message if verbose output enabled.
         console.log(chalk.red(`Error: ${error}`));
       }
