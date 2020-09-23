@@ -43,30 +43,6 @@ class App extends Command {
   }
 
   /**
-   * Store github credentials
-   * @param username
-   * @param password
-   */
-  private storeGithubAuth(username: string, password: string): boolean {
-    this.config.set('gh_username', username);
-    this.config.set('gh_password', password);
-    return true;
-  }
-
-  /**
-   * Retrieve stored github credentials
-   * @param username
-   * @param password
-   */
-  private getGithubAuth(): GitHubAuth {
-    const auth = {
-      username: this.config.get('gh_username'),
-      password: this.config.get('gh_password'),
-    };
-    return auth;
-  }
-
-  /**
    * Get class's singleton instance
    * @param appName
    */
