@@ -22,7 +22,7 @@ app
 app
   .command('cid')
   .description('get device chip id')
-  .option('-p, --port [port]', 'device port')
+  .option('-p, --port <port>', 'device port')
   .action((options) => {
     app.getChipId(options.port);
   });
@@ -33,9 +33,9 @@ app
 app
   .command('upload')
   .description('compile and upload firmware')
-  .option('-p, --port [port]', 'device port')
-  .option('-l, --lock [cid]', 'lock firmware to specific chip id')
-  .option('-s, --max_slv [max_slv]', 'maximum number of slaves allowed')
+  .option('-p, --port <port>', 'device port')
+  .option('-l, --lock <lock>', 'lock firmware to specific chip id')
+  .option('-s, --max_slv <max_slv>', 'maximum number of slaves allowed')
   .option('-w --webui', 'upload Web-UI after uploading the firmware image')
   .action((port, options) => {
     app.uploadFirmware(port, options);
@@ -47,7 +47,7 @@ app
 app
   .command('erase')
   .description('erase device flash')
-  .option('-p, --port [port]', 'device port')
+  .option('-p, --port <port>', 'device port')
   .action(async (port: string) => {
     app.eraseFlash(port);
   });
