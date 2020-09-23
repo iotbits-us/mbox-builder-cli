@@ -23,8 +23,8 @@ app
   .command('cid')
   .description('get device chip id')
   .option('-p, --port [port]', 'device port')
-  .action((port) => {
-    app.getChipId(port);
+  .action((options) => {
+    app.getChipId(options.port);
   });
 
 /**
