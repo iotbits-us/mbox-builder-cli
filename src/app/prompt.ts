@@ -43,3 +43,23 @@ export const selectPort = (): Promise<Port> => {
     );
   });
 };
+
+const configMenuQuestions = [
+  {
+    type: 'list',
+    name: 'config',
+    message: 'What would you like to configure?',
+    choices: ['GitHub Access', 'Default Building Options', 'Debug'],
+    filter: function (val) {
+      return val.toLowerCase();
+    },
+  },
+];
+
+export const configMenu = () => {
+  return new Promise((resolve) => {
+    inquirer.prompt(configMenuQuestions).then((answers) => {
+      resolve(answers);
+    });
+  });
+};
