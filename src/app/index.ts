@@ -20,8 +20,8 @@ class App extends Command {
    * Class constructor
    * @param appName
    */
-  private constructor(appName?: string) {
-    super(appName);
+  private constructor() {
+    super('mbox-builder-helper');
     // read data from package.json
     this.pkg = readPkg.sync();
     // create config store object
@@ -37,12 +37,36 @@ class App extends Command {
   }
 
   /**
+   * Store github credentials
+   * @param username
+   * @param password
+   */
+  private storeGithubAuth(username: string, password: string): boolean {
+    this.config.set('gh_username', username);
+    this.config.set('gh_password', password);
+    return true;
+  }
+
+  /**
+   * Retrieve stored github credentials
+   * @param username
+   * @param password
+   */
+  private getGithubAuth(): GitHubAuth {
+    const auth = {
+      username: this.config.get('gh_username'),
+      password: this.config.get('gh_password'),
+    };
+    return auth;
+  }
+
+  /**
    * Get class's singleton instance
    * @param appName
    */
-  public static getInstance(appName?: string): App {
+  public static getInstance(): App {
     if (!App.instance) {
-      App.instance = new App(appName);
+      App.instance = new App();
     }
 
     return App.instance;
@@ -51,7 +75,7 @@ class App extends Command {
   /**
    * Start app
    */
-  start() {
+  public start() {
     this.version(this.pkg.version);
     this.description(this.pkg.description);
     this.parse(process.argv);
@@ -63,7 +87,7 @@ class App extends Command {
   /**
    * list available serial ports
    */
-  async listSerialPorts() {
+  public async listSerialPorts() {
     const loading = ora('Looking for available serial ports').start();
 
     // create table
@@ -104,7 +128,7 @@ class App extends Command {
    *  Get chip id
    * @param port
    */
-  async getChipId(port: string) {
+  public async getChipId(port: string) {
     const loading = ora();
 
     // if no port provided as argument, prompt with available ports.
@@ -129,7 +153,7 @@ class App extends Command {
   /**
    * Upload firmware
    */
-  async uploadFirmware(options: {
+  public async uploadFirmware(options: {
     port: string;
     dir: string;
     lock: string;
@@ -173,7 +197,7 @@ class App extends Command {
    * Erase device flash memory
    * @param port
    */
-  async eraseFlash(port: string) {
+  public async eraseFlash(port: string) {
     const loading = ora();
 
     // if no port provided as argument, prompt with available ports.
@@ -196,32 +220,8 @@ class App extends Command {
       }
     );
   }
-
-  /**
-   * Store github credentials
-   * @param username
-   * @param password
-   */
-  storeGithubAuth(username: string, password: string): boolean {
-    this.config.set('gh_username', username);
-    this.config.set('gh_password', password);
-    return true;
-  }
-
-  /**
-   * Retrieve stored github credentials
-   * @param username
-   * @param password
-   */
-  getGithubAuth(): GitHubAuth {
-    const auth = {
-      username: this.config.get('gh_username'),
-      password: this.config.get('gh_password'),
-    };
-    return auth;
-  }
 }
 
-const app = App.getInstance('mbox-builder');
+const app = App.getInstance();
 
 export default app;
