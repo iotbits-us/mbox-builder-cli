@@ -48,8 +48,8 @@ app
   .command('erase')
   .description('erase device flash')
   .option('-p, --port <port>', 'device port')
-  .action(async (port: string) => {
-    app.eraseFlash(port);
+  .action((options) => {
+    app.eraseFlash(options.port);
   });
 
 // Start application. Always run this at the end of this file.
