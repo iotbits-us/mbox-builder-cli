@@ -2,10 +2,9 @@ import chalk from 'chalk';
 import clear from 'clear';
 import Table from 'cli-table';
 import { Command } from 'commander';
-import Configstore from 'configstore';
 import figlet from 'figlet';
 import _ from 'lodash';
-import helper, { GitHubAuth } from 'mbox-builder-helper';
+import helper from 'mbox-builder-helper';
 import ora from 'ora';
 import readPkg from 'read-pkg';
 
@@ -14,7 +13,6 @@ import * as prompts from './prompt';
 
 class App extends Command {
   private static instance: App;
-  private config: Configstore;
   private pkg: readPkg.NormalizedPackageJson;
 
   /**
@@ -30,8 +28,6 @@ class App extends Command {
     super(appBinName);
     // copy local _pkg to class scoped pkg object
     this.pkg = _pkg;
-    // create config store object
-    this.config = new Configstore(this.pkg.version);
     // clear console
     clear();
     // show top caption
