@@ -10,7 +10,7 @@ import ora from 'ora';
 import readPkg from 'read-pkg';
 
 import { Port } from './model';
-import * as prompt from './prompt';
+import * as prompts from './prompt';
 
 class App extends Command {
   private static instance: App;
@@ -139,7 +139,7 @@ class App extends Command {
 
     // if no port provided as argument, prompt with available ports.
     if (!port) {
-      port = (await prompt.selectPort()).path;
+      port = (await prompts.selectPort()).path;
     }
 
     loading.start('Getting chip id from device');
@@ -170,7 +170,7 @@ class App extends Command {
     const loading = ora();
     // if no port provided, prompt with available ports.
     if (!options.port) {
-      options.port = (await prompt.selectPort()).path;
+      options.port = (await prompts.selectPort()).path;
     }
 
     // if no firmware directory provided, use current working directory.
@@ -208,7 +208,7 @@ class App extends Command {
 
     // if no port provided as argument, prompt with available ports.
     if (!port) {
-      port = (await prompt.selectPort()).path;
+      port = (await prompts.selectPort()).path;
     }
 
     loading.start(chalk.red('Performing flash erase on device'));
