@@ -119,8 +119,28 @@ class App extends Command {
   }
 
   // erase device flash memory
-  eraseFlash(port: string) {
-    return port;
+  async eraseFlash(port: string) {
+    const loading = ora();
+
+    // if no port provided as argument, prompt with available ports.
+    if (!port) {
+      port = (await prompt.selectPort()).path;
+    }
+
+    loading.start(chalk.red('Performing flash erase on device'));
+
+    helper.eraseFlash(port).then(
+      () => {
+        loading.succeed(
+          chalk.greenBright('Device flash has been successfully erased')
+        );
+      },
+      (error) => {
+        loading.fail(`An error has ocurred trying to erase device flash`);
+        // TODO: Only show detailed error message if verbose output enabled.
+        console.log(chalk.red(`Error: ${error}`));
+      }
+    );
   }
 }
 
