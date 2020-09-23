@@ -4,7 +4,7 @@ import Table from 'cli-table';
 import { Command } from 'commander';
 import Configstore from 'configstore';
 import figlet from 'figlet';
-import helper from 'mbox-builder-helper';
+import helper, { GitHubAuth } from 'mbox-builder-helper';
 import ora from 'ora';
 
 import packageJson from '../../package.json';
@@ -172,6 +172,30 @@ class App extends Command {
         console.log(chalk.red(`Error: ${error}`));
       }
     );
+  }
+
+  /**
+   * Store github credentials
+   * @param username
+   * @param password
+   */
+  storeGithubAuth(username: string, password: string): boolean {
+    this.config.set('gh_username', username);
+    this.config.set('gh_password', password);
+    return true;
+  }
+
+  /**
+   * Retrieve stored github credentials
+   * @param username
+   * @param password
+   */
+  getGithubAuth(): GitHubAuth {
+    const auth = {
+      username: this.config.get('gh_username'),
+      password: this.config.get('gh_password'),
+    };
+    return auth;
   }
 }
 
