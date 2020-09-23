@@ -104,33 +104,18 @@ class App extends Command {
   }
 
   // upload firmware
-  async uploadFirmware(
-    port: string,
-    options: {
-      readonly lock: unknown;
-      readonly max_slv: number;
-      readonly webui: boolean;
-    }
-  ) {
+  async uploadFirmware(options: {
+    port: string;
+    chipId: string;
+    slaves: number;
+    webui: boolean;
+    trialTime: number;
+  }) {
     console.log(chalk.blueBright('Firmware upload'));
-
-    // const spinner = ora('Uploading firmware').start();
-
     // if no port provided as argument, prompt with available ports.
-    if (!port) {
-      port = (await prompt.selectPort()).path;
+    if (!options.port) {
+      options.port = (await prompt.selectPort()).path;
     }
-
-    const chipId =
-      typeof options.lock == 'string'
-        ? options.lock
-        : options.lock === true
-        ? await helper.getChipId(port)
-        : false;
-
-    console.log('port:', port);
-
-    console.log('chipId:', chipId);
   }
 
   // erase device flash memory
