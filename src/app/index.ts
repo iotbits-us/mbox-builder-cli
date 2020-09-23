@@ -22,10 +22,14 @@ class App extends Command {
    * @param appName
    */
   private constructor() {
-    super('mbox-builder-helper');
     // read data from package.json
-    this.pkg = readPkg.sync();
-
+    const _pkg = readPkg.sync();
+    // get app's bin name from package.json
+    const appBinName = _.keys(_pkg.bin)[0];
+    // call super
+    super(appBinName);
+    // copy local _pkg to class scoped pkg object
+    this.pkg = _pkg;
     // create config store object
     this.config = new Configstore(this.pkg.version);
     // clear console
