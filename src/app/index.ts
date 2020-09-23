@@ -111,7 +111,6 @@ class App extends Command {
     webui: boolean;
     trialTime: number;
   }) {
-    console.log(chalk.blueBright('Firmware upload'));
     // if no port provided as argument, prompt with available ports.
     if (!options.port) {
       options.port = (await prompt.selectPort()).path;
