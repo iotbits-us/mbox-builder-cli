@@ -6,8 +6,7 @@ import Configstore from 'configstore';
 import figlet from 'figlet';
 import helper, { GitHubAuth } from 'mbox-builder-helper';
 import ora from 'ora';
-
-import packageJson from '../../package.json';
+import readPkg from 'read-pkg';
 
 import { Port } from './model';
 import * as prompt from './prompt';
@@ -15,10 +14,17 @@ import * as prompt from './prompt';
 class App extends Command {
   private static instance: App;
   private config: Configstore;
+  private pkg;
+
+  /**
+   * Class constructor
+   * @param appName
+   */
   private constructor(appName?: string) {
     super(appName);
+    this.pkg = readPkg.sync();
     // Create a Configstore instance
-    this.config = new Configstore(packageJson.name);
+    this.config = new Configstore(this.pkg.name);
     this.spinner = ora();
     clear();
     console.log(
@@ -38,10 +44,9 @@ class App extends Command {
 
   // start app
   start() {
-    this.version(packageJson.version);
-    this.description(packageJson.description);
+    this.version(this.pkg.version);
+    this.description(this.pkg.description);
     this.parse(process.argv);
-
     if (!process.argv.slice(2).length) {
       this.outputHelp();
     }
