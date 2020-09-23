@@ -2,18 +2,23 @@ import chalk from 'chalk';
 import clear from 'clear';
 import Table from 'cli-table';
 import { Command } from 'commander';
+import Configstore from 'configstore';
 import figlet from 'figlet';
 import helper from 'mbox-builder-helper';
 import ora from 'ora';
+
+import packageJson from '../../package.json';
 
 import { Port } from './model';
 import * as prompt from './prompt';
 
 class App extends Command {
   private static instance: App;
+  private config: Configstore;
   private constructor(appName?: string) {
     super(appName);
-
+    // Create a Configstore instance
+    this.config = new Configstore(packageJson.name);
     this.spinner = ora();
     clear();
     console.log(
