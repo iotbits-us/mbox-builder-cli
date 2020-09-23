@@ -37,9 +37,9 @@ class App extends Command {
   }
 
   // start app
-  start(version: string, description: string) {
-    this.version(version);
-    this.description(description);
+  start() {
+    this.version(packageJson.version);
+    this.description(packageJson.description);
     this.parse(process.argv);
 
     if (!process.argv.slice(2).length) {
