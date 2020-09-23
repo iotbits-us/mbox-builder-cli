@@ -85,7 +85,7 @@ class App extends Command {
 
     // if no port provided as argument, prompt with available ports
     if (!port) {
-      port = (await prompt.selectPortPrompt()).path;
+      port = (await prompt.selectPort()).path;
     }
 
     loading.start('Getting chip id from device');
@@ -116,7 +116,7 @@ class App extends Command {
 
     // if no port provided as argument, prompt with available ports
     if (!port) {
-      port = (await prompt.selectPortPrompt()).path;
+      port = (await prompt.selectPort()).path;
     }
 
     const chipId =
