@@ -8,7 +8,7 @@ import { Port } from './model';
  * Prompt available serial ports
  * Show available serial port and return a promise with the one selected.
  */
-export const selectPortPrompt = (): Promise<Port> => {
+export const selectPort = (): Promise<Port> => {
   return new Promise((resolve, reject) => {
     const loading = ora('Looking for available serial ports').start();
     helper.getPorts().then(
