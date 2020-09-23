@@ -74,6 +74,7 @@ class App extends Command {
       },
       (error) => {
         app.spinner.fail(`Could not retrieve serial ports`);
+        // TODO: Only show detailed error message if verbose output enabled.
         console.log(chalk.red(`Error: ${error}`));
       }
     );
@@ -83,7 +84,7 @@ class App extends Command {
   async getChipId(port: string) {
     const loading = ora();
 
-    // if no port provided as argument, prompt with available ports
+    // if no port provided as argument, prompt with available ports.
     if (!port) {
       port = (await prompt.selectPort()).path;
     }
@@ -96,6 +97,7 @@ class App extends Command {
       },
       (error) => {
         loading.fail(`Could not read chip id from device`);
+        // TODO: Only show detailed error message if verbose output enabled.
         console.log(chalk.red(`Error: ${error}`));
       }
     );
@@ -114,7 +116,7 @@ class App extends Command {
 
     // const spinner = ora('Uploading firmware').start();
 
-    // if no port provided as argument, prompt with available ports
+    // if no port provided as argument, prompt with available ports.
     if (!port) {
       port = (await prompt.selectPort()).path;
     }
