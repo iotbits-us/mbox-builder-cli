@@ -49,8 +49,12 @@ const configMenuQuestions = [
     type: 'list',
     name: 'config',
     message: 'What would you like to configure?',
-    choices: ['GitHub Access', 'Default Building Options', 'Debug'],
-    filter: function (val) {
+    choices: [
+      { name: 'GitHub Credentials', value: 'github' },
+      { name: 'Default Building Options', value: 'building' },
+      { name: 'Debug Info', value: 'debug' },
+    ],
+    filter: function (val: string) {
       return val.toLowerCase();
     },
   },
@@ -58,8 +62,8 @@ const configMenuQuestions = [
 
 export const configMenu = () => {
   return new Promise((resolve) => {
-    inquirer.prompt(configMenuQuestions).then((answers) => {
-      resolve(answers);
+    inquirer.prompt(configMenuQuestions).then((mainMenuSelection) => {
+      resolve(mainMenuSelection);
     });
   });
 };
