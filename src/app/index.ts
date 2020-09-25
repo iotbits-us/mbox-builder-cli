@@ -231,6 +231,17 @@ class App extends Command {
       }
     );
   }
+
+  public async showConfigMenu() {
+    const configMenuSelection = await prompts.configMenu();
+    switch (configMenuSelection) {
+      case 'github':
+        break;
+
+      default:
+        break;
+    }
+  }
 }
 
 const app = App.getInstance();
