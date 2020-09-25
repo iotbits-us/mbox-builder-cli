@@ -58,14 +58,15 @@
     "lodash": "^4.17.20",
     "mbox-builder-helper": "^1.0.1",
     "ora": "^5.1.0",
-    "read-pkg": "^5.2.0"
+    "read-pkg-up": "^7.0.1"
   },
   "devDependencies": {
-    "@types/configstore": "^4.0.0",
     "@ava/typescript": "^1.1.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/app-root-path": "^1.2.4",
     "@types/clear": "^0.1.0",
     "@types/cli-table": "^0.3.0",
+    "@types/configstore": "^4.0.0",
     "@types/figlet": "^1.2.0",
     "@types/inquirer": "^7.3.1",
     "@types/lodash": "^4.14.161",
