@@ -6,7 +6,7 @@ import Configstore from 'configstore';
 import figlet from 'figlet';
 import inquirer from 'inquirer';
 import _ from 'lodash';
-import helper, { GitHubAuth } from 'mbox-builder-helper';
+import helper, { BuildOptions, GitHubAuth } from 'mbox-builder-helper';
 import ora from 'ora';
 import readPkg from 'read-pkg';
 
@@ -173,6 +173,7 @@ class App extends Command {
     slaves: number;
     webui: boolean;
     trial: number;
+    wizard: boolean;
   }) {
     const loading = ora();
     // if no port provided, prompt with available ports.
@@ -192,8 +193,20 @@ class App extends Command {
       return;
     }
 
+    const buildOptions: BuildOptions = {
+      chipId: options.lock ? options.lock : '',
+      maxSlave: options.slaves ? options.slaves : 4,
+      trialMode: options.trial ? true : false,
+      trialTime: options.trial ? options.trial : 1440,
+    };
+
     helper
-      .buildAndUpload(options.dir, options.port, this.getGithubLogin())
+      .buildAndUpload(
+        options.dir,
+        options.port,
+        this.getGithubLogin(),
+        buildOptions
+      )
       .then(
         () => {
           loading.succeed(chalk.greenBright('Firmware successfully uploaded'));
