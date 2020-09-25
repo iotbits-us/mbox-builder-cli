@@ -236,8 +236,15 @@ class App extends Command {
     const configMenuSelection = await prompts.configMenu();
     switch (configMenuSelection) {
       case 'github':
+        if (this.checkGithubLogin()) {
+          console.log(this.getGithubLogin());
+          return;
+        } else {
+          const result = await prompts.addGithubLogin();
+          console.log(result);
+          this.storeGithubLogin('', '');
+        }
         break;
-
       default:
         break;
     }
