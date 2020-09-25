@@ -1,5 +1,5 @@
 import inquirer from 'inquirer';
-import helper from 'mbox-builder-helper';
+import helper, { BuildOptions } from 'mbox-builder-helper';
 import ora from 'ora';
 
 import { Port } from './model';
@@ -86,6 +86,46 @@ export const addGithubLogin = () => {
   return new Promise((resolve) => {
     inquirer.prompt(addGithubLoginQuestions).then((answers) => {
       resolve(answers);
+    });
+  });
+};
+
+const uploadWizardQuestions = [
+  {
+    type: 'confirm',
+    name: 'lockToDevice',
+    message: 'Would you like to lock the firmware to the device on USB port?',
+    default: false,
+  },
+  {
+    type: 'input',
+    name: 'slaves',
+    message: 'Enter the maximum amount of slaves 1-4:',
+    validate: function (value: string) {
+      const valid =
+        !isNaN(parseInt(value)) && parseInt(value) > 0 && parseInt(value) < 5;
+      return valid || 'Please enter a number between 1 and 4';
+    },
+    filter: Number,
+  },
+  {
+    type: 'input',
+    name: 'trialTime',
+    message: 'Enter the trial time:',
+    validate: function (value: string) {
+      const valid = !isNaN(parseInt(value));
+      return valid || 'Please enter a number';
+    },
+    filter: Number,
+  },
+];
+
+export const uploadWizard = (): Promise<BuildOptions> => {
+  return new Promise((resolve) => {
+    const buildOptions: BuildOptions = {};
+    inquirer.prompt(uploadWizardQuestions).then((answers) => {
+      console.log(answers);
+      resolve(buildOptions);
     });
   });
 };
