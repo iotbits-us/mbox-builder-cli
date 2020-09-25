@@ -4,6 +4,7 @@ import Table from 'cli-table';
 import { Command } from 'commander';
 import Configstore from 'configstore';
 import figlet from 'figlet';
+import inquirer from 'inquirer';
 import _ from 'lodash';
 import helper, { GitHubAuth } from 'mbox-builder-helper';
 import ora from 'ora';
@@ -66,8 +67,9 @@ class App extends Command {
   }
 
   private checkGithubLogin(): boolean {
-    if (this.config.get('gh_username') && this.config.get('gh_password'))
+    if (this.config.get('gh_username') || this.config.get('gh_password')) {
       return true;
+    }
     return false;
   }
 
@@ -185,23 +187,25 @@ class App extends Command {
 
     loading.start('Compiling and uploading firmware');
 
-    const auth = {
-      username: 'evert-arias',
-      password: '304e7d191f5c8ecd3bf2abc370fa5103e6ef8b23',
-    };
+    if (!this.checkGithubLogin()) {
+      loading.fail(chalk.red('Github credentials not found in config'));
+      return;
+    }
 
-    helper.buildAndUpload(options.dir, options.port, auth).then(
-      () => {
-        loading.succeed(chalk.greenBright('Firmware successfully uploaded'));
-      },
-      (error) => {
-        loading.fail(
-          `An error has ocurred trying to build and upload firmware`
-        );
-        // TODO: Only show detailed error message if verbose output enabled.
-        console.log(chalk.red(`Error: ${error}`));
-      }
-    );
+    helper
+      .buildAndUpload(options.dir, options.port, this.getGithubLogin())
+      .then(
+        () => {
+          loading.succeed(chalk.greenBright('Firmware successfully uploaded'));
+        },
+        (error) => {
+          loading.fail(
+            `An error has ocurred trying to build and upload firmware`
+          );
+          // TODO: Only show detailed error message if verbose output enabled.
+          console.log(chalk.red(`Error: ${error}`));
+        }
+      );
   }
 
   /**
@@ -232,22 +236,44 @@ class App extends Command {
     );
   }
 
+  /**
+   * Show config menu
+   */
   public async showConfigMenu() {
-    const configMenuSelection = await prompts.configMenu();
-    switch (configMenuSelection) {
-      case 'github':
-        if (this.checkGithubLogin()) {
-          console.log(this.getGithubLogin());
-          return;
-        } else {
-          const result = await prompts.addGithubLogin();
-          console.log(result);
-          this.storeGithubLogin('', '');
-        }
-        break;
-      default:
-        break;
-    }
+    prompts.configMenu().then((configMenuSelection: { config: string }) => {
+      switch (configMenuSelection.config) {
+        case 'github':
+          if (this.checkGithubLogin()) {
+            console.log(chalk.green('Github credentials already exist.'));
+            console.log(chalk.grey(JSON.stringify(this.getGithubLogin())));
+            inquirer
+              .prompt({
+                type: 'confirm',
+                name: 'editCredentials',
+                message: 'Would you like to modify them?',
+                default: false,
+              })
+              .then((result) => {
+                if (result.editCredentials) {
+                  prompts.addGithubLogin().then((entry: GitHubAuth) => {
+                    this.storeGithubLogin(entry.username, entry.password);
+                    console.log(chalk.greenBright('Saved!'));
+                  });
+                } else {
+                  return;
+                }
+              });
+          } else {
+            prompts.addGithubLogin().then((entry: GitHubAuth) => {
+              this.storeGithubLogin(entry.username, entry.password);
+            });
+          }
+          break;
+
+        default:
+          break;
+      }
+    });
   }
 }
 
