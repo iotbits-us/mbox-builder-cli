@@ -48,5 +48,12 @@ app
     app.eraseFlash(options.port);
   });
 
+app
+  .command('config')
+  .description('configuration')
+  .action(() => {
+    app.showConfigMenu();
+  });
+
 // Start application. Always run this at the end of this file.
 app.start();
