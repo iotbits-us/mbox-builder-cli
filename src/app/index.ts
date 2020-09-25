@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import clear from 'clear';
 import Table from 'cli-table';
 import { Command } from 'commander';
+import Configstore from 'configstore';
 import figlet from 'figlet';
 import _ from 'lodash';
 import helper from 'mbox-builder-helper';
@@ -14,7 +15,7 @@ import * as prompts from './prompt';
 class App extends Command {
   private static instance: App;
   private pkg: readPkg.NormalizedPackageJson;
-
+  private config;
   /**
    * Class constructor
    * @param appName
@@ -28,6 +29,8 @@ class App extends Command {
     super(appBinName);
     // copy local _pkg to class scoped pkg object
     this.pkg = _pkg;
+    // create config store
+    this.config = new Configstore(this.pkg.name);
     // clear console
     clear();
     // show top caption
