@@ -33,6 +33,7 @@ app
   .option('-s, --slaves <slaves>', 'maximum number of slaves allowed')
   .option('-w --webui', 'upload web-ui after uploading the firmware image')
   .option('-t --trial <time>', 'enable trial mode')
+  .option('-a --wizard', 'run firmware upload wizard')
   .action((options) => {
     app.uploadFirmware(options);
   });
