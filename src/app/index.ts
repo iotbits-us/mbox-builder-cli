@@ -5,7 +5,7 @@ import { Command } from 'commander';
 import Configstore from 'configstore';
 import figlet from 'figlet';
 import _ from 'lodash';
-import helper from 'mbox-builder-helper';
+import helper, { GitHubAuth } from 'mbox-builder-helper';
 import ora from 'ora';
 import readPkg from 'read-pkg';
 
@@ -39,6 +39,30 @@ class App extends Command {
         figlet.textSync('MBox Builder', { horizontalLayout: 'full' })
       )
     );
+  }
+
+  /**
+   * Store github credentials
+   * @param username
+   * @param password
+   */
+  private storeGithubLogin(username: string, password: string): boolean {
+    this.config.set('gh_username', username);
+    this.config.set('gh_password', password);
+    return true;
+  }
+
+  /**
+   * Retrieve stored github credentials
+   * @param username
+   * @param password
+   */
+  private getGithubLogin(): GitHubAuth {
+    const auth = {
+      username: this.config.get('gh_username'),
+      password: this.config.get('gh_password'),
+    };
+    return auth;
   }
 
   /**
