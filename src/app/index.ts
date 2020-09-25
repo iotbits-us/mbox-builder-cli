@@ -8,14 +8,13 @@ import inquirer from 'inquirer';
 import _ from 'lodash';
 import helper, { BuildOptions, GitHubAuth } from 'mbox-builder-helper';
 import ora from 'ora';
-import readPkg from 'read-pkg';
+import readPkgUp from 'read-pkg-up';
 
 import { Port } from './model';
 import * as prompts from './prompt';
-
 class App extends Command {
   private static instance: App;
-  private pkg: readPkg.NormalizedPackageJson;
+  private pkg: readPkgUp.NormalizedReadResult;
   private config: Configstore;
   /**
    * Class constructor
@@ -23,15 +22,17 @@ class App extends Command {
    */
   private constructor() {
     // read data from package.json
-    const _pkg = readPkg.sync();
+    const _pkgUp = readPkgUp.sync({
+      cwd: __filename,
+    });
     // get app's bin name from package.json
-    const appBinName = _.keys(_pkg.bin)[0];
+    const appBinName = _.keys(_pkgUp.packageJson.bin)[0];
     // call super
     super(appBinName);
     // copy local _pkg to class scoped pkg object
-    this.pkg = _pkg;
+    this.pkg = _pkgUp;
     // create config store
-    this.config = new Configstore(this.pkg.name);
+    this.config = new Configstore(this.pkg.packageJson.name);
     // clear console
     clear();
     // show top caption
@@ -89,8 +90,8 @@ class App extends Command {
    * Start app
    */
   public start() {
-    this.version(this.pkg.version);
-    this.description(this.pkg.description);
+    this.version(this.pkg.packageJson.version);
+    this.description(this.pkg.packageJson.description);
     this.parse(process.argv);
     if (!process.argv.slice(2).length) {
       this.outputHelp();
