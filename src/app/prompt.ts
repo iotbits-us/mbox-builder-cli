@@ -51,8 +51,8 @@ const configMenuQuestions = [
     message: 'What would you like to configure?',
     choices: [
       { name: 'GitHub Credentials', value: 'github' },
-      { name: 'Default Building Options', value: 'building' },
-      { name: 'Debug Info', value: 'debug' },
+      { name: 'Default Building Options', value: 'building', disabled: true },
+      { name: 'Debug Info', value: 'debug', disabled: true },
     ],
     filter: function (val: string) {
       return val.toLowerCase();
@@ -70,27 +70,15 @@ export const configMenu = () => {
 
 const addGithubLoginQuestions = [
   {
-    type: 'list',
-    name: 'config',
-    message: 'What would you like to add?',
-    choices: [
-      { name: 'Username', value: 'username' },
-      { name: 'Password', value: 'password' },
-    ],
-    filter: function (val: string) {
-      return val.toLowerCase();
-    },
-  },
-  {
     type: 'input',
     name: 'username',
-    message: 'Enter your Github username',
+    message: 'Enter your Github username:',
     filter: String,
   },
   {
     type: 'password',
     name: 'password',
-    message: 'Enter your Github password',
+    message: 'Enter your Github password:',
   },
 ];
 
