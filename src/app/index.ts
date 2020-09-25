@@ -15,7 +15,7 @@ import * as prompts from './prompt';
 class App extends Command {
   private static instance: App;
   private pkg: readPkg.NormalizedPackageJson;
-  private config;
+  private config: Configstore;
   /**
    * Class constructor
    * @param appName
@@ -63,6 +63,12 @@ class App extends Command {
       password: this.config.get('gh_password'),
     };
     return auth;
+  }
+
+  private checkGithubLogin(): boolean {
+    if (this.config.get('gh_username') && this.config.get('gh_password'))
+      return true;
+    return false;
   }
 
   /**
